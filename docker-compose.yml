@@ -1,0 +1,29 @@
+
+
+services:
+  web-interface:
+    build: ./web-interface
+    container_name: hs-crontab-all-in-one
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    volumes:
+      - ./crontab.txt:/app/crontab.txt
+      - ./logs:/app/logs
+      - ./auth.db:/app/auth.db
+    environment:
+      - NODE_ENV=production
+      - JWT_SECRET=your-secret-key-change-in-production
+      - TZ=UTC
+      - DOMAIN=localhost
+    restart: unless-stopped
+    networks:
+      - crontab-network
+
+networks:
+  crontab-network:
+    driver: bridge
+
+volumes:
+  logs:
+    driver: local
